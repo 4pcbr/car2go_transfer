@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS `Car` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`vin` VARCHAR(32) NOT NULL,
+	`name` VARCHAR(32) NOT NULL,
+	`engine_type` ENUM('ED', 'HZ'),
+	`created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
+	`updated_at` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+	KEY (`vin`),
+	KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `CarStop` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`car_id` INT NOT NULL,
+	`charging` BOOL DEFAULT FALSE,
+	`address` VARCHAR(1024),
+	`lat` FLOAT NOT NULL DEFAULT 0.0,
+	`lon` FLOAT NOT NULL DEFAULT 0.0,
+	`z` FLOAT NOT NULL DEFAULT 0.0,
+	`fuel` INT NOT NULL DEFAULT 0,
+	`interior` ENUM('GOOD', 'UNACCEPTABLE'),
+	`exterior` ENUM('GOOD', 'UNACCEPTABLE'),
+	KEY `state` (`lat`, `lon`, `z`, `interior`, `exterior`, `charging`)
+) ENGINE=InnoDB DEFAULT CHARACTER SET = utf8;
