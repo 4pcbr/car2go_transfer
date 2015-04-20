@@ -44,6 +44,8 @@ RESPONSE_TO_MODEL_ATTR_MAP = {
   },
 }
 
+FETCH_INTERVAL_MIN = 5
+
 def parse(resp, parser)
   out = {}
   parser.each_pair do |resp_attr, out_attr|
@@ -95,7 +97,7 @@ EM.run do
     inactivity_timeout: 20,
   }
   
-  EM.add_periodic_timer(1 * 60) do
+  EM.add_periodic_timer(FETCH_INTERVAL_MIN * 60) do
     begin
       http_req = EM::HttpRequest.new(CAR2GO_API_VEHICLES_URL, http_connect_opts).get
       http_req.errback do

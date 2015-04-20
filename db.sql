@@ -1,16 +1,16 @@
-DROP TABLE `Cars`;
+DROP TABLE IF EXISTS `Cars`;
 CREATE TABLE `Cars` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`vin` VARCHAR(32) NOT NULL,
 	`name` VARCHAR(32) NOT NULL,
 	`engine_type` ENUM('ED', 'HZ'),
-	`created_at` TIMESTAMP NOT NULL DEFAULT NOW(),
-	`updated_at` TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+	`created_at` TIMESTAMP NOT NULL,
+	`updated_at` TIMESTAMP NOT NULL,
 	UNIQUE INDEX (`vin`),
 	UNIQUE INDEX (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET = utf8;
 
-DROP TABLE `CarStops`;
+DROP TABLE IF EXISTS `CarStops`;
 CREATE TABLE IF NOT EXISTS `CarStops` (
 	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`car_id` INT NOT NULL,
@@ -22,5 +22,7 @@ CREATE TABLE IF NOT EXISTS `CarStops` (
 	`fuel` INT NOT NULL DEFAULT 0,
 	`interior` ENUM('GOOD', 'UNACCEPTABLE'),
 	`exterior` ENUM('GOOD', 'UNACCEPTABLE'),
+  `created_at` TIMESTAMP NOT NULL,
+	`updated_at` TIMESTAMP NOT NULL,
 	UNIQUE INDEX `car_state` (`car_id`, `lat`, `lon`, `z`, `interior`, `exterior`, `charging`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET = utf8;
