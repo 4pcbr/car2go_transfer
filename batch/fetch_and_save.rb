@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$:.unshift File.expand_path(File.dirname(__FILE__), 'lib')
+$:.unshift File.expand_path('../lib', File.dirname(__FILE__))
 
 require 'rubygems'
 require 'active_record'
@@ -11,15 +11,9 @@ require 'mysql2/em'
 require 'json'
 
 # local lib files
-require 'car'
-require 'car_stop'
-
-MYSQL_HOST = 'localhost'
-MYSQL_DB   = 'car2go'
-MYSQL_USER = ENV["C2G_MYSQL_USER"] or abort("C2G_MYSQL_USER env variable is expected")
-MYSQL_PWD  = ENV["C2G_MYSQL_PWD"]  or abort("C2G_MYSQL_PWD env variable is expected")
-MYSQL_READ_TIMEOUT = 5
-MYSQL_CONNECT_TIMEOUT = 60
+require 'db/connector'
+require 'model/car'
+require 'model/car_stop'
 
 log = Logger.new(STDOUT)
 log.level = Logger::DEBUG
@@ -76,17 +70,7 @@ end
 
 log.info 'Establishing a DB connection'
 
-ActiveRecord::Base.establish_connection(
-  adapter:          'mysql2',
-  host:             MYSQL_HOST,
-  database:         MYSQL_DB,
-  username:         MYSQL_USER,
-  password:         MYSQL_PWD,
-  uncoding:         'utf8',
-  read_timeout:     MYSQL_READ_TIMEOUT,
-  # connect_timeout:  MYSQL_CONNECT_TIMEOUT,
-  reconnect:        true,
-)
+Db::Connector.connect!
 
 log.info 'DB connection established'
 
