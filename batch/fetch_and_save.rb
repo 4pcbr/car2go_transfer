@@ -31,7 +31,7 @@ RESPONSE_TO_MODEL_ATTR_MAP = {
   car_stop: {
     'address'     => 'address',
     'charging'    => 'charging',
-    'coordinates' => Proc.new { |v| { 'lat' => v[0], 'lon' => v[1], 'z' => v[2] } },
+    'coordinates' => Proc.new { |v| { 'lon' => v[0], 'lat' => v[1], 'z' => v[2] } },
     'interior'    => 'interior',
     'exterior'    => 'exterior',
     'fuel'        => 'fuel',
