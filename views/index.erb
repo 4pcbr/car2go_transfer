@@ -11,18 +11,25 @@
     
     <body>
         <div id="page">
+            <div class='time-label' id='time_label'></div>
             <div class="container-fluid text-center">
-                <h2>Amsterdam car2go daily transit</h2>
+                <h2>Amsterdam car2go daily fluctuations</h2>
             </div>
             <div class="container-fluid">
                 <div id="map"></div>
             </div>
         </div>
+<!--        <script data-main="/js/app" src="/js/lib/require.js" type="text/javascript" charset="utf-8"></script> -->
         <script type="text/javascript"
               src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAPS_API_KEY'] %>"></script>
 
-        <script data-main="/js/app" src="/js/lib/require.js" type="text/javascript" charset="utf-8"></script>
-              
+        <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/lib/moment.min.js"></script>
+
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" charset="utf-8" src="/js/timeline.js"></script>
+        <script type="text/javascript" charset="utf-8" src="/js/main.js"></script>
     </body>
 
 </html>

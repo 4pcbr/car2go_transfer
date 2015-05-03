@@ -3,6 +3,25 @@
 	var MAP_DIV_ID 			= 'map';
 	var API_URI_CARS 		= '/api/cars';
 	var API_URI_CAR_STOPS 	= '/api/car_stops';
+  var TIME_LABEL_ID   = 'time_label';
+
+  var whiteMarkerIcon = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: '#FFF',
+    strokeColor: '#000',
+    strokeWeight: 1,
+    scale: 5,
+    fillOpacity: 1.0,
+  };
+  var blueMarkerIcon  = {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: '#3333FF',
+    strokeColor: '#000',
+    strokeWeight: 1,
+    scale: 5,
+    fillOpacity: 1.0,
+  };
+  var $timeLabel      = $('#' + TIME_LABEL_ID);
 	
 	function init_map(cb) {
 		var map_opts = {
@@ -35,16 +54,59 @@
 						timeline.push(car_stop);
 					});
 					
+					var timeline = new Timeline({
+						speed: 100.0,
+            animation_speed: 1.0,
+            // animation_duration: 2000,
+            tick: function() {
+              $timeLabel.text(moment(this.time * 1000).format('DD MMM, HH:mm:ss'));
+            }
+					});
+
+					var minTimestamp = null;
+
 					$.each(car_tuples, function(car_id, car_tuple) {
 						var first_pos = car_tuple.timeline[0]; // FIXME
+            if (!first_pos) {
+              return;
+            };
 						var marker = new google.maps.Marker({
 							map: map,
 							position: {
 								lat: first_pos.lon,
 								lng: first_pos.lat,
 							},
+              icon: whiteMarkerIcon,
 						});
+						var sequence = [];
+						$.each(car_tuple.timeline, function(_, timeline_obj) {
+							var timestamp = timeline_obj.timestamp;
+							if (!minTimestamp || (minTimestamp > timestamp)) {
+								minTimestamp = timestamp;
+							}
+              var pos = {
+                lat:  timeline_obj.lon,
+                lon:  timeline_obj.lat,
+              };
+							sequence.push({
+								time:    timestamp,
+								pos:     pos,
+                start:   function() {
+                  marker.setIcon(blueMarkerIcon);
+                },
+								step:    function(pos) {
+                  marker.setPosition({ lat: this.lat, lng: this.lon });
+								},
+                finish:  function() {
+                  marker.setIcon(whiteMarkerIcon);
+                },
+							});
+						});
+						timeline.addSequence(sequence);
 					});
+          console.log('Min timestamp: %d', minTimestamp);
+					timeline.setStartTime(minTimestamp);
+					timeline.play();
 				});
 			})
 		});

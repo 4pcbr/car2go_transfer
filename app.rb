@@ -41,6 +41,19 @@ get '/api/car_stops' do
   car_stops = CarStop.order(:created_at).all
   content_type :json
   gzipped do
-    car_stops.to_json
+    car_stops.to_json(
+      except: [
+        :address,
+        :created_at,
+        :updated_at,
+        :interior,
+        :exterior,
+      ],
+      methods: [
+        :timestamp,
+        :interior_int,
+        :exterior_int,
+      ]
+    )
   end
 end
