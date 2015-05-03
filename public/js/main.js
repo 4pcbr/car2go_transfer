@@ -18,7 +18,7 @@
     fillColor: '#3333FF',
     strokeColor: '#000',
     strokeWeight: 1,
-    scale: 5,
+    scale: 7,
     fillOpacity: 1.0,
   };
   var $timeLabel      = $('#' + TIME_LABEL_ID);
@@ -55,7 +55,7 @@
 					});
 					
 					var timeline = new Timeline({
-						speed: 100.0,
+						speed: 1000.0,
             animation_speed: 1.0,
             // animation_duration: 2000,
             tick: function() {
@@ -66,18 +66,21 @@
 					var minTimestamp = null;
 
 					$.each(car_tuples, function(car_id, car_tuple) {
-						var first_pos = car_tuple.timeline[0]; // FIXME
-            if (!first_pos) {
+						var firstPos = car_tuple.timeline[0]; // FIXME
+            if (!firstPos) {
               return;
             };
 						var marker = new google.maps.Marker({
 							map: map,
 							position: {
-								lat: first_pos.lon,
-								lng: first_pos.lat,
+								lat: firstPos.lon,
+								lng: firstPos.lat,
 							},
               icon: whiteMarkerIcon,
 						});
+            google.maps.event.addListener(marker, 'click', function() {
+              console.log("car_id: ", car_id);
+            })
 						var sequence = [];
 						$.each(car_tuple.timeline, function(_, timeline_obj) {
 							var timestamp = timeline_obj.timestamp;
@@ -104,7 +107,6 @@
 						});
 						timeline.addSequence(sequence);
 					});
-          console.log('Min timestamp: %d', minTimestamp);
 					timeline.setStartTime(minTimestamp);
 					timeline.play();
 				});

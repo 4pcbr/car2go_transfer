@@ -18,6 +18,7 @@ require 'model/car_stop'
 log = Logger.new(STDOUT)
 log.level = Logger::DEBUG
 
+ActiveRecord::Base.default_timezone = :local
 ActiveRecord::Base.logger = log
 
 CAR2GO_API_VEHICLES_URL = 'https://www.car2go.com/api/v2.1/vehicles?loc=amsterdam&oauth_consumer_key=car2gowebsite&format=json'

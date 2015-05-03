@@ -11,6 +11,7 @@ require 'model/car'
 require 'model/car_stop'
 require 'db/connector'
 
+ActiveRecord::Base.default_timezone = :local
 Db::Connector.connect!
 
 get '/' do
